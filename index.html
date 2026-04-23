@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Remove PDF Password Online | 100% Private & Free Unlocker</title>
+    <meta name="description" content="Unlock PDF and remove password instantly without uploading your file. 100% safe, private, and free tool for bank statements and Aadhaar.">
+    <meta name="keywords" content="remove pdf password, unlock pdf online, pdf password remover without upload, private pdf unlocker, remove password from bank statement pdf">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="canonical" href="https://photoready.in/pdf-unlocker/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🔓 100% Private PDF Password Remover">
+    <meta property="og:description" content="Remove password from Bank Statements, PAN, and Aadhaar PDFs safely. Your file never leaves your browser!">
+    <meta property="og:image" content="https://photoready.in/banner.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Syne:wght@800&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is it safe to remove password from my bank statement here?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, 100% safe. This tool works locally in your web browser. Your sensitive PDF file is NEVER uploaded to any server. We cannot see, store, or access your documents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How to unlock PDF without uploading?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Just drag and drop your encrypted PDF into our tool, enter the current password, and click Unlock. The browser removes the encryption locally and gives you an unprotected PDF."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #ef4444; /* Red color theme for PDFs */
+            --primary-dark: #dc2626;
+            --accent: #f59e0b;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); 
+            background-image: radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+                              radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+            color: var(--text); 
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* --- 🚀 3D LOADING SCREEN --- */
+        #loader {
+            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .spinner-3d {
+            width: 60px; height: 60px; border: 4px solid transparent;
+            border-top: 4px solid var(--primary); border-right: 4px solid var(--accent);
+            border-radius: 50%; animation: spin3d 1s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        @keyframes spin3d { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 20px; font-family: 'Syne', sans-serif; letter-spacing: 2px; color: var(--primary); font-size: 0.9rem; }
+
+        /* --- 💎 UI LAYOUT --- */
+        .site-wrap { 
+            max-width: 680px; margin: 0 auto; padding: 40px 20px;
+            opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .site-wrap.loaded { opacity: 1; transform: translateY(0); }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; color: #fff; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .header h1 { font-size: 1.6rem; margin-bottom: 10px; color: var(--text); line-height: 1.3; font-family: 'Syne', sans-serif; }
+        .header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* --- 🛡️ THE GLASS CARD --- */
+        .glass-card {
+            background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 28px; padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 30px;
+        }
+
+        /* --- 📁 UPLOAD ZONE --- */
+        .upload-area {
+            border: 2px dashed rgba(255,255,255,0.2); border-radius: 20px; padding: 40px 20px;
+            text-align: center; cursor: pointer; background: rgba(255,255,255,0.03); transition: 0.3s;
+        }
+        .upload-area:hover { border-color: var(--primary); background: rgba(239, 68, 68, 0.05); }
+        .upload-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        
+        .preview-row { display: none; align-items: center; gap: 15px; margin-top: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid var(--primary); }
+        .preview-row.visible { display: flex; }
+        .pdf-icon { font-size: 2rem; }
+
+        /* --- ✍️ INPUTS --- */
+        .input-group { margin-top: 25px; display: flex; flex-direction: column; gap: 15px; }
+        .field label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .field input {
+            width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); 
+            border-radius: 12px; color: #fff; font-size: 1.1rem; font-family: inherit; outline: none; transition: 0.3s; letter-spacing: 1px;
+        }
+        .field input:focus { border-color: var(--primary); }
+        
+        /* Security Badge */
+        .security-badge { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-top: 15px; }
+
+        /* --- ⚡ BUTTONS --- */
+        .btn {
+            width: 100%; padding: 18px; border: none; border-radius: 16px; font-family: 'Syne', sans-serif; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1rem; color: white; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-main { background: linear-gradient(135deg, var(--primary), #b91c1c); box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4); margin-top: 20px; }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(239, 68, 68, 0.6); }
+
+        /* --- 🖼️ RESULT --- */
+        #result { display: none; text-align: center; }
+        .action-btns { display: flex; gap: 12px; margin-top: 20px;}
+        .btn-dl { background: var(--success); flex: 2; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);}
+        .btn-dl:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.6); }
+        .btn-wa { background: #25D366; flex: 1; }
+        .btn-wa:hover { transform: translateY(-3px); }
+
+        /* Error Box */
+        #errorBox { display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: #fca5a5; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-top: 15px; text-align: center; }
+
+        /* ======================================================== */
+        /* 📚 MASSIVE SEO CONTENT SECTION (STYLED FOR DARK THEME)   */
+        /* ======================================================== */
+        .seo-container {
+            margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.2); border-radius: 24px; border: 1px solid var(--glass-border);
+        }
+        .seo-container h2 { font-family: 'Syne', sans-serif; font-size: 1.3rem; color: var(--primary); margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .seo-container h2:first-child { margin-top: 0; }
+        .seo-container p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
+        .seo-container ul { margin-left: 20px; margin-bottom: 20px; color: var(--text-muted); }
+        .seo-container li { margin-bottom: 10px; font-size: 0.95rem; }
+        .seo-container strong { color: var(--text); font-weight: 600; }
+
+        .faq-item { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px 20px; margin-bottom: 15px; }
+        .faq-item h3 { font-size: 1rem; color: var(--text); margin-bottom: 8px; font-weight: 600; }
+        .faq-item p { margin-bottom: 0; font-size: 0.9rem; }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <div class="spinner-3d"></div>
+        <div class="loading-text">SECURING BROWSER</div>
+    </div>
+
+    <div class="site-wrap" id="mainWrap">
+        <header class="header">
+            <a href="/" class="logo"><i>📄</i> PDF<span>Ready</span></a>
+            <h1>Remove PDF Password Safely</h1>
+            <p>Unlock Bank Statements, Aadhaar & PAN PDFs. 100% Client-Side Processing.</p>
+        </header>
+
+        <div class="glass-card">
+            <div class="upload-area" id="dropZone">
+                <span class="upload-icon">🔒</span>
+                <h3>Upload Encrypted PDF</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Your file will NOT be uploaded to any server.</p>
+            </div>
+            <input type="file" id="fileIn" style="display:none" accept="application/pdf">
+
+            <div class="preview-row" id="pRow">
+                <div class="pdf-icon">📄</div>
+                <div style="flex:1; overflow:hidden;">
+                    <div style="font-weight:700; font-size:0.9rem; white-space:nowrap; text-overflow:ellipsis;" id="pFileName"></div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);" id="pFileSize"></div>
+                </div>
+                <button style="color:var(--primary); background:none; border:none; font-weight:800; cursor:pointer;" onclick="document.getElementById('fileIn').click()">CHANGE</button>
+            </div>
+
+            <div class="security-badge">
+                <span>🛡️</span> Zero Upload. Processed Offline in your Browser.
+            </div>
+
+            <div class="input-group">
+                <div class="field">
+                    <label>Enter PDF Password</label>
+                    <input type="text" id="passIn" placeholder="Password (e.g., DOB or Name+DOB)" autocomplete="off">
+                </div>
+            </div>
+
+            <div id="errorBox">⚠️ Incorrect password or invalid PDF. Please try again.</div>
+
+            <button class="btn btn-main" id="unlockBtn">🔓 UNLOCK PDF</button>
+        </div>
+
+        <div id="result" class="glass-card">
+            <h3 style="font-family:'Syne'; color:var(--success); font-size: 1.3rem; margin-bottom: 5px;">✅ PDF Unlocked Successfully!</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">The password has been permanently removed.</p>
+            
+            <div class="action-btns">
+                <button class="btn btn-dl" id="dlBtn">⬇️ DOWNLOAD UNLOCKED PDF</button>
+            </div>
+            <div class="action-btns" style="margin-top: 12px;">
+                <button class="btn btn-wa" id="waBtn">💬 SHARE WITH CA/FRIENDS</button>
+            </div>
+        </div>
+
+        <div class="seo-container">
+            <h2>Remove PDF Password Without Uploading</h2>
+            <p>Welcome to the safest way to <strong>remove password from PDF online</strong>. Whether you are trying to open a bank statement, an Aadhaar card, or an encrypted PAN card document, typing the password every time is frustrating. Our tool allows you to <strong>unlock PDF locally</strong> without exposing your sensitive financial data to the internet.</p>
+
+            <h2>Why is this tool 100% Private?</h2>
+            <p>Most popular PDF websites upload your files to their cloud servers to remove the encryption. This is highly risky for documents containing your bank account numbers or tax details. <strong>PDFReady uses JavaScript (pdf-lib)</strong> to process the decryption directly inside your own computer's RAM. <strong>Your file never leaves your browser.</strong></p>
+
+            <h2>Step-by-Step Guide to Unlock PDF</h2>
+            <ul>
+                <li><strong>Step 1:</strong> Select your encrypted PDF file from your phone or computer.</li>
+                <li><strong>Step 2:</strong> Enter the original password (the one you currently use to open it).</li>
+                <li><strong>Step 3:</strong> Click on "Unlock PDF". Your browser will instantly strip the encryption.</li>
+                <li><strong>Step 4:</strong> Download the unlocked PDF. You will never need a password for this file again!</li>
+            </ul>
+
+            <h2>Frequently Asked Questions (FAQs)</h2>
+            
+            <div class="faq-item">
+                <h3>Is it safe to remove password from my bank statement here?</h3>
+                <p>Yes, absolutely. Because this is a <strong>client-side PDF password remover</strong>, your bank statement is never uploaded to any server. You can even turn off your internet connection after loading this page, and the tool will still work!</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Can I bypass a PDF password if I forgot it?</h3>
+                <p>No. This is not a hacking tool. To remove the permanent encryption, you MUST know the correct current password. We simply remove the protection so you don't have to type it again in the future.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why is my Aadhaar card PDF not unlocking?</h3>
+                <p>Ensure you are entering the correct Aadhaar password format. Usually, it is the first 4 letters of your name in CAPITAL letters followed by your birth year (e.g., RAHU1995).</p>
+            </div>
+        </div>
+        </div>
+
+    <script>
+        const el = (id) => document.getElementById(id);
+        let selectedFile = null;
+        let unlockedBlob = null;
+
+        // --- 🕒 LOADER LOGIC ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                el('loader').style.opacity = '0';
+                setTimeout(() => el('loader').style.display = 'none', 500);
+                el('mainWrap').classList.add('loaded');
+            }, 1000);
+        });
+
+        // --- 📂 FILE HANDLING ---
+        el('dropZone').onclick = () => el('fileIn').click();
+        
+        el('fileIn').onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file || file.type !== "application/pdf") {
+                alert("Please select a valid PDF file.");
+                return;
+            }
+            selectedFile = file;
+            el('pFileName').innerText = file.name;
+            el('pFileSize').innerText = (file.size / 1024).toFixed(1) + " KB";
+            
+            el('pRow').classList.add('visible');
+            el('dropZone').style.display = 'none';
+            el('result').style.display = 'none';
+            el('errorBox').style.display = 'none';
+            el('passIn').value = '';
+            el('passIn').focus();
+        };
+
+        // --- 🔓 UNLOCK LOGIC (Using pdf-lib) ---
+        el('unlockBtn').onclick = async () => {
+            if(!selectedFile) {
+                alert("Please upload a PDF file first.");
+                return;
+            }
+
+            const password = el('passIn').value;
+            if(!password) {
+                alert("Please enter the PDF password.");
+                return;
+            }
+
+            const btn = el('unlockBtn');
+            btn.innerText = "⏳ PROCESSING...";
+            btn.style.opacity = "0.7";
+            el('errorBox').style.display = 'none';
+
+            try {
+                // Read the file into an ArrayBuffer
+                const arrayBuffer = await selectedFile.arrayBuffer();
+
+                // 🧠 MAGIC HAPPENS HERE: Load the encrypted PDF with the password
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
+                    password: password,
+                    updateMetadata: false 
+                });
+
+                // Save it. pdf-lib automatically saves it WITHOUT encryption!
+                const pdfBytes = await pdfDoc.save();
+
+                // Create a downloadable blob
+                unlockedBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+                
+                // Show Success UI
+                el('result').style.display = 'block';
+                el('result').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Unlock Error:", error);
+                el('errorBox').style.display = 'block';
+                if(error.message.includes("password") || error.message.includes("encrypted")) {
+                    el('errorBox').innerText = "⚠️ Incorrect password. Please check and try again.";
+                } else {
+                    el('errorBox').innerText = "⚠️ Failed to read PDF. It might be corrupted or not encrypted.";
+                }
+            } finally {
+                btn.innerText = "🔓 UNLOCK PDF";
+                btn.style.opacity = "1";
+            }
+        };
+
+        // --- ⬇️ DOWNLOAD LOGIC ---
+        el('dlBtn').onclick = () => {
+            if(!unlockedBlob) return;
+            const url = URL.createObjectURL(unlockedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            // Add 'unlocked_' prefix to the original file name
+            a.download = `unlocked_${selectedFile.name}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // --- 💬 SHARE LOGIC ---
+        el('waBtn').onclick = () => {
+            const t = encodeURIComponent("Bhai, Bank Statement aur Aadhaar PDF ka password hatane ke liye ye 100% safe aur offline tool use kar. Server upload nahi hota! Try kar: https://photoready.in/pdf-unlocker/");
+            window.open(`https://api.whatsapp.com/send?text=${t}`);
+        };
+    </script>
+</body>
+</html>

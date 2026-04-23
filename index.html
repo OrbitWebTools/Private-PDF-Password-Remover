@@ -18,7 +18,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 
@@ -48,180 +48,195 @@
     </script>
 
     <style>
+        /* --- 🎨 LIGHT & FRESH COLOR PALETTE --- */
         :root {
-            --primary: #ef4444; /* Red color theme for PDFs */
-            --primary-dark: #dc2626;
-            --accent: #f59e0b;
-            --bg: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --success: #10b981;
-            --danger: #ef4444;
+            --primary: #4f46e5;       /* Trustworthy Indigo */
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --success: #10b981;       /* Fresh Green */
+            --success-hover: #059669;
+            --success-light: #d1fae5;
+            --danger: #ef4444;        /* Soft Red */
+            --danger-light: #fee2e2;
+            --bg: #f8fafc;            /* Very Light Blue/Gray */
+            --card-bg: #ffffff;       /* Pure White */
+            --text-main: #0f172a;     /* Deep Slate */
+            --text-muted: #64748b;    /* Soft Slate */
+            --border: #e2e8f0;
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px -10px rgba(79, 70, 229, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); 
-            background-image: radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-                              radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
-            color: var(--text); 
+            color: var(--text-main); 
             line-height: 1.6;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* --- 🚀 3D LOADING SCREEN --- */
+        /* --- 🚀 CLEAN LOADING SCREEN --- */
         #loader {
-            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+            position: fixed; inset: 0; background: var(--card-bg); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s;
+            transition: opacity 0.4s ease, visibility 0.4s;
         }
-        .spinner-3d {
-            width: 60px; height: 60px; border: 4px solid transparent;
-            border-top: 4px solid var(--primary); border-right: 4px solid var(--accent);
-            border-radius: 50%; animation: spin3d 1s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid var(--border);
+            border-top: 4px solid var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        @keyframes spin3d { to { transform: rotate(360deg); } }
-        .loading-text { margin-top: 20px; font-family: 'Syne', sans-serif; letter-spacing: 2px; color: var(--primary); font-size: 0.9rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 15px; font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--text-muted); font-size: 0.95rem; letter-spacing: 1px; }
 
         /* --- 💎 UI LAYOUT --- */
         .site-wrap { 
-            max-width: 680px; margin: 0 auto; padding: 40px 20px;
-            opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 100%; max-width: 600px; padding: 40px 20px;
+            opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out;
         }
         .site-wrap.loaded { opacity: 1; transform: translateY(0); }
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; color: #fff; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .header h1 { font-size: 1.6rem; margin-bottom: 10px; color: var(--text); line-height: 1.3; font-family: 'Syne', sans-serif; }
-        .header p { color: var(--text-muted); font-size: 0.95rem; }
+        .header { text-align: center; margin-bottom: 35px; }
+        .logo { font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .logo span { color: var(--primary); }
+        .header p { color: var(--text-muted); font-size: 1rem; font-weight: 500; }
 
-        /* --- 🛡️ THE GLASS CARD --- */
-        .glass-card {
-            background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border); border-radius: 28px; padding: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 30px;
+        /* --- 🛡️ WHITE CARD (SaaS Style) --- */
+        .white-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 30px;
+            transition: box-shadow 0.3s ease;
         }
+        .white-card:hover { box-shadow: var(--shadow-hover); }
 
         /* --- 📁 UPLOAD ZONE --- */
         .upload-area {
-            border: 2px dashed rgba(255,255,255,0.2); border-radius: 20px; padding: 40px 20px;
-            text-align: center; cursor: pointer; background: rgba(255,255,255,0.03); transition: 0.3s;
+            border: 2px dashed var(--border);
+            border-radius: 16px; padding: 40px 20px;
+            text-align: center; cursor: pointer; background: var(--bg); transition: 0.2s;
         }
-        .upload-area:hover { border-color: var(--primary); background: rgba(239, 68, 68, 0.05); }
-        .upload-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        .upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
+        .upload-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+        .upload-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--text-main); margin-bottom: 5px;}
         
-        .preview-row { display: none; align-items: center; gap: 15px; margin-top: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid var(--primary); }
+        .preview-row { display: none; align-items: center; gap: 15px; margin-top: 20px; background: var(--primary-light); padding: 15px; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.2); }
         .preview-row.visible { display: flex; }
-        .pdf-icon { font-size: 2rem; }
+        .pdf-icon { font-size: 2.5rem; }
+        .file-name { font-weight: 700; font-size: 0.95rem; color: var(--primary); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+        /* Safety Badge */
+        .safety-badge { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--success-light); color: var(--success-hover); padding: 10px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; margin-top: 20px; }
 
         /* --- ✍️ INPUTS --- */
-        .input-group { margin-top: 25px; display: flex; flex-direction: column; gap: 15px; }
-        .field label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .input-group { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
+        .field label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .field input {
-            width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); 
-            border-radius: 12px; color: #fff; font-size: 1.1rem; font-family: inherit; outline: none; transition: 0.3s; letter-spacing: 1px;
+            width: 100%; padding: 16px; background: var(--bg); border: 2px solid var(--border); 
+            border-radius: 12px; color: var(--text-main); font-size: 1.05rem; font-family: inherit; outline: none; transition: 0.2s;
         }
-        .field input:focus { border-color: var(--primary); }
-        
-        /* Security Badge */
-        .security-badge { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-top: 15px; }
+        .field input:focus { border-color: var(--primary); background: var(--card-bg); box-shadow: 0 0 0 4px var(--primary-light); }
+
+        /* Error Box */
+        #errorBox { display: none; background: var(--danger-light); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--danger); padding: 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; margin-top: 15px; text-align: center; }
 
         /* --- ⚡ BUTTONS --- */
         .btn {
-            width: 100%; padding: 18px; border: none; border-radius: 16px; font-family: 'Syne', sans-serif; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1rem; color: white; display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; padding: 18px; border: none; border-radius: 14px; font-family: 'Outfit', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1.05rem; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
-        .btn-main { background: linear-gradient(135deg, var(--primary), #b91c1c); box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4); margin-top: 20px; }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(239, 68, 68, 0.6); }
+        .btn-main { background: var(--primary); color: white; margin-top: 25px; box-shadow: 0 8px 20px -6px var(--primary); }
+        .btn-main:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 12px 20px -6px var(--primary); }
+        .btn-main:active { transform: translateY(0); }
 
-        /* --- 🖼️ RESULT --- */
+        /* --- 🖼️ RESULT AREA --- */
         #result { display: none; text-align: center; }
-        .action-btns { display: flex; gap: 12px; margin-top: 20px;}
-        .btn-dl { background: var(--success); flex: 2; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);}
-        .btn-dl:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.6); }
-        .btn-wa { background: #25D366; flex: 1; }
-        .btn-wa:hover { transform: translateY(-3px); }
-
-        /* Error Box */
-        #errorBox { display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: #fca5a5; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-top: 15px; text-align: center; }
+        .result-icon { font-size: 4rem; margin-bottom: 10px; }
+        .action-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 25px;}
+        .btn-dl { background: var(--success); color: white; box-shadow: 0 8px 20px -6px var(--success); }
+        .btn-dl:hover { background: var(--success-hover); transform: translateY(-2px); }
+        .btn-wa { background: #fff; color: #25D366; border: 2px solid #25D366; }
+        .btn-wa:hover { background: #f0fdf4; }
 
         /* ======================================================== */
-        /* 📚 MASSIVE SEO CONTENT SECTION (STYLED FOR DARK THEME)   */
+        /* 📚 CLEAN SEO CONTENT SECTION                             */
         /* ======================================================== */
         .seo-container {
-            margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.2); border-radius: 24px; border: 1px solid var(--glass-border);
+            margin-top: 30px; padding: 30px; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-soft);
         }
-        .seo-container h2 { font-family: 'Syne', sans-serif; font-size: 1.3rem; color: var(--primary); margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .seo-container h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--text-main); margin-top: 25px; margin-bottom: 12px; }
         .seo-container h2:first-child { margin-top: 0; }
-        .seo-container p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
+        .seo-container p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 15px; }
         .seo-container ul { margin-left: 20px; margin-bottom: 20px; color: var(--text-muted); }
-        .seo-container li { margin-bottom: 10px; font-size: 0.95rem; }
-        .seo-container strong { color: var(--text); font-weight: 600; }
+        .seo-container li { margin-bottom: 8px; font-size: 0.95rem; }
+        .seo-container strong { color: var(--text-main); font-weight: 600; }
 
-        .faq-item { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px 20px; margin-bottom: 15px; }
-        .faq-item h3 { font-size: 1rem; color: var(--text); margin-bottom: 8px; font-weight: 600; }
-        .faq-item p { margin-bottom: 0; font-size: 0.9rem; }
+        .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 15px; }
+        .faq-item h3 { font-size: 1.05rem; font-family: 'Outfit', sans-serif; color: var(--text-main); margin-bottom: 8px; }
+        .faq-item p { margin-bottom: 0; font-size: 0.9rem; color: var(--text-muted); }
     </style>
 </head>
 
 <body>
 
     <div id="loader">
-        <div class="spinner-3d"></div>
-        <div class="loading-text">SECURING BROWSER</div>
+        <div class="spinner"></div>
+        <div class="loading-text">LOADING WORKSPACE</div>
     </div>
 
     <div class="site-wrap" id="mainWrap">
         <header class="header">
-            <a href="/" class="logo"><i>📄</i> PDF<span>Ready</span></a>
-            <h1>Remove PDF Password Safely</h1>
-            <p>Unlock Bank Statements, Aadhaar & PAN PDFs. 100% Client-Side Processing.</p>
+            <a href="/" class="logo">📄 PDF<span>Ready</span></a>
+            <p>Unlock Bank Statements, Aadhaar & PAN Safely.</p>
         </header>
 
-        <div class="glass-card">
+        <div class="white-card">
             <div class="upload-area" id="dropZone">
                 <span class="upload-icon">🔒</span>
-                <h3>Upload Encrypted PDF</h3>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Your file will NOT be uploaded to any server.</p>
+                <h3 class="upload-title">Choose Encrypted PDF</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">or drag & drop file here</p>
             </div>
             <input type="file" id="fileIn" style="display:none" accept="application/pdf">
 
             <div class="preview-row" id="pRow">
                 <div class="pdf-icon">📄</div>
                 <div style="flex:1; overflow:hidden;">
-                    <div style="font-weight:700; font-size:0.9rem; white-space:nowrap; text-overflow:ellipsis;" id="pFileName"></div>
-                    <div style="font-size:0.75rem; color:var(--text-muted);" id="pFileSize"></div>
+                    <div class="file-name" id="pFileName"></div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);" id="pFileSize"></div>
                 </div>
-                <button style="color:var(--primary); background:none; border:none; font-weight:800; cursor:pointer;" onclick="document.getElementById('fileIn').click()">CHANGE</button>
+                <button style="color:var(--primary); background:var(--card-bg); border:1px solid var(--primary); padding: 6px 12px; border-radius: 8px; font-weight:700; cursor:pointer; font-size: 0.75rem;" onclick="document.getElementById('fileIn').click()">CHANGE</button>
             </div>
 
-            <div class="security-badge">
-                <span>🛡️</span> Zero Upload. Processed Offline in your Browser.
+            <div class="safety-badge">
+                <span>🛡️</span> 100% Offline. Your file never leaves this device.
             </div>
 
             <div class="input-group">
                 <div class="field">
-                    <label>Enter PDF Password</label>
-                    <input type="text" id="passIn" placeholder="Password (e.g., DOB or Name+DOB)" autocomplete="off">
+                    <label>Enter Original Password</label>
+                    <input type="text" id="passIn" placeholder="e.g., Your DOB or Name" autocomplete="off">
                 </div>
             </div>
 
             <div id="errorBox">⚠️ Incorrect password or invalid PDF. Please try again.</div>
 
-            <button class="btn btn-main" id="unlockBtn">🔓 UNLOCK PDF</button>
+            <button class="btn btn-main" id="unlockBtn">🔓 UNLOCK PDF NOW</button>
         </div>
 
-        <div id="result" class="glass-card">
-            <h3 style="font-family:'Syne'; color:var(--success); font-size: 1.3rem; margin-bottom: 5px;">✅ PDF Unlocked Successfully!</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">The password has been permanently removed.</p>
+        <div id="result" class="white-card">
+            <div class="result-icon">🎉</div>
+            <h3 style="font-family:'Outfit'; color:var(--text-main); font-size: 1.5rem; margin-bottom: 5px;">PDF Unlocked!</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted);">The password has been permanently removed.</p>
             
             <div class="action-btns">
                 <button class="btn btn-dl" id="dlBtn">⬇️ DOWNLOAD UNLOCKED PDF</button>
-            </div>
-            <div class="action-btns" style="margin-top: 12px;">
-                <button class="btn btn-wa" id="waBtn">💬 SHARE WITH CA/FRIENDS</button>
+                <button class="btn btn-wa" id="waBtn">💬 SHARE WITH FRIENDS</button>
             </div>
         </div>
 
@@ -230,13 +245,13 @@
             <p>Welcome to the safest way to <strong>remove password from PDF online</strong>. Whether you are trying to open a bank statement, an Aadhaar card, or an encrypted PAN card document, typing the password every time is frustrating. Our tool allows you to <strong>unlock PDF locally</strong> without exposing your sensitive financial data to the internet.</p>
 
             <h2>Why is this tool 100% Private?</h2>
-            <p>Most popular PDF websites upload your files to their cloud servers to remove the encryption. This is highly risky for documents containing your bank account numbers or tax details. <strong>PDFReady uses JavaScript (pdf-lib)</strong> to process the decryption directly inside your own computer's RAM. <strong>Your file never leaves your browser.</strong></p>
+            <p>Most popular PDF websites upload your files to their cloud servers to remove the encryption. This is highly risky for documents containing your bank account numbers or tax details. <strong>PDFReady uses JavaScript</strong> to process the decryption directly inside your own computer's RAM. <strong>Your file never leaves your browser.</strong></p>
 
             <h2>Step-by-Step Guide to Unlock PDF</h2>
             <ul>
                 <li><strong>Step 1:</strong> Select your encrypted PDF file from your phone or computer.</li>
                 <li><strong>Step 2:</strong> Enter the original password (the one you currently use to open it).</li>
-                <li><strong>Step 3:</strong> Click on "Unlock PDF". Your browser will instantly strip the encryption.</li>
+                <li><strong>Step 3:</strong> Click on "Unlock PDF Now". Your browser will instantly strip the encryption.</li>
                 <li><strong>Step 4:</strong> Download the unlocked PDF. You will never need a password for this file again!</li>
             </ul>
 
@@ -244,7 +259,7 @@
             
             <div class="faq-item">
                 <h3>Is it safe to remove password from my bank statement here?</h3>
-                <p>Yes, absolutely. Because this is a <strong>client-side PDF password remover</strong>, your bank statement is never uploaded to any server. You can even turn off your internet connection after loading this page, and the tool will still work!</p>
+                <p>Yes, absolutely. Because this is a <strong>client-side PDF password remover</strong>, your bank statement is never uploaded to any server. You can even turn off your internet connection after loading this page, and the tool will still work perfectly!</p>
             </div>
             
             <div class="faq-item">
@@ -257,7 +272,8 @@
                 <p>Ensure you are entering the correct Aadhaar password format. Usually, it is the first 4 letters of your name in CAPITAL letters followed by your birth year (e.g., RAHU1995).</p>
             </div>
         </div>
-        </div>
+
+    </div>
 
     <script>
         const el = (id) => document.getElementById(id);
@@ -268,9 +284,9 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 el('loader').style.opacity = '0';
-                setTimeout(() => el('loader').style.display = 'none', 500);
+                setTimeout(() => el('loader').style.display = 'none', 400);
                 el('mainWrap').classList.add('loaded');
-            }, 1000);
+            }, 800);
         });
 
         // --- 📂 FILE HANDLING ---
@@ -313,22 +329,15 @@
             el('errorBox').style.display = 'none';
 
             try {
-                // Read the file into an ArrayBuffer
                 const arrayBuffer = await selectedFile.arrayBuffer();
-
-                // 🧠 MAGIC HAPPENS HERE: Load the encrypted PDF with the password
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
                     password: password,
                     updateMetadata: false 
                 });
 
-                // Save it. pdf-lib automatically saves it WITHOUT encryption!
                 const pdfBytes = await pdfDoc.save();
-
-                // Create a downloadable blob
                 unlockedBlob = new Blob([pdfBytes], { type: 'application/pdf' });
                 
-                // Show Success UI
                 el('result').style.display = 'block';
                 el('result').scrollIntoView({ behavior: 'smooth' });
 
@@ -341,7 +350,7 @@
                     el('errorBox').innerText = "⚠️ Failed to read PDF. It might be corrupted or not encrypted.";
                 }
             } finally {
-                btn.innerText = "🔓 UNLOCK PDF";
+                btn.innerText = "🔓 UNLOCK PDF NOW";
                 btn.style.opacity = "1";
             }
         };
@@ -352,7 +361,6 @@
             const url = URL.createObjectURL(unlockedBlob);
             const a = document.createElement('a');
             a.href = url;
-            // Add 'unlocked_' prefix to the original file name
             a.download = `unlocked_${selectedFile.name}`;
             document.body.appendChild(a);
             a.click();
